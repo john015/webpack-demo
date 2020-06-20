@@ -21,18 +21,11 @@ module.exports = (webpackEnv) => {
       rules: [
         {
           test: /\.(js|jsx|ts|tsx)$/,
-          exclude: /node_modules/,
-          use: {
-            loader: "babel-loader",
-            options: {
-              presets: ["@babel/preset-react", "@babel/preset-typescript"],
-            },
-          },
+          use: "babel-loader",
         },
       ],
     },
     resolve: {
-      modules: ["node_modules"],
       extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
     },
     plugins: [
