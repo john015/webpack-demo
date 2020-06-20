@@ -4,13 +4,16 @@ const TerserJSPlugin = require("terser-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = (webpackEnv) => {
+  const isEnvProduction = webpackEnv === "production";
   const isEnvDevelopment = webpackEnv === "development";
 
   return {
-    mode: isEnvDevelopment ? "development" : "production",
-    entry: "./src/index.tsx",
+    mode: isEnvProduction ? "production" : "development",
+    entry: "./src",
     output: {
-      filename: "static/js/[name].[contenthash:8].js",
+      filename: isEnvProduction
+        ? "static/js/[name].[contenthash].js"
+        : "static/js/bundle.js",
       path: path.resolve(__dirname, "dist"),
     },
     devtool: "source-map",
@@ -32,15 +35,15 @@ module.exports = (webpackEnv) => {
       modules: ["node_modules"],
       extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
     },
-    // plugins: [
-    //   new HtmlWebpackPlugin({
-    //     template: "public/index.html",
-    //     minify: {
-    //       collapseWhitespace: true,
-    //     },
-    //     hash: true,
-    //   }),
-    // ],
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: "public/index.html",
+        minify: {
+          collapseWhitespace: true,
+        },
+        hash: true,
+      }),
+    ],
     optimization: {
       minimizer: [new TerserJSPlugin({ sourceMap: true })],
     },
